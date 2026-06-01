@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cardápio Digital | Lagoa Parque Hotel</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      color: #203123;
+      background: #eef0df;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(238,240,223,0.86), rgba(238,240,223,0.92)),
+        url("img/frente2.jpg") center/cover no-repeat;
+      z-index: -2;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(255,255,255,0.25), rgba(36,59,42,0.18));
+      z-index: -1;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 20;
+      padding: 18px 8%;
+      display: flex;
+      justify-content: flex-end;
+      gap: 26px;
+      background: rgba(238,240,223,0.78);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(36,59,42,0.12);
+    }
+
+    nav a {
+      color: #203123;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 45px;
+      align-items: center;
+      padding: 110px 8% 70px;
+    }
+
+    .hero-text {
+      max-width: 620px;
+      padding: 35px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.38);
+      box-shadow: 0 20px 60px rgba(31,49,35,0.12);
+      backdrop-filter: blur(4px);
+    }
+
+    .tag {
+      display: inline-block;
+      color: #8b672b;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 6vw, 5.4rem);
+      line-height: 1.02;
+      margin-bottom: 22px;
+      color: #17281c;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      line-height: 1.65;
+      margin-bottom: 28px;
+      color: #344737;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #243b2a;
+      color: white;
+      padding: 15px 26px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-right: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn.secondary { background: #b8873a; }
+
+    .qr-card {
+      background: rgba(255,255,255,0.66);
+      border-radius: 34px;
+      padding: 38px;
+      text-align: center;
+      box-shadow: 0 22px 70px rgba(31,49,35,0.18);
+      border: 1px solid rgba(255,255,255,0.55);
+    }
+
+    .qr-code-img {
+      width: 230px;
+      height: 230px;
+      margin: 20px auto;
+      display: block;
+      background: white;
+      padding: 12px;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(31,49,35,0.16);
+    }
+
+    .qr-card h2 { font-size: 2rem; color: #17281c; }
+    .qr-card p { color: #445247; line-height: 1.55; }
+
+    section { padding: 80px 8%; }
+
+    .section-title {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 45px;
+    }
+
+    .section-title span {
+      color: #8b672b;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 0.85rem;
+    }
+
+    .section-title h2 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      margin-top: 10px;
+      color: #17281c;
+    }
+
+    .section-title p {
+      margin-top: 14px;
+      color: #465348;
+      line-height: 1.65;
+      font-size: 1.05rem;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 42px;
+      align-items: center;
+      max-width: 1150px;
+      margin: auto;
+    }
+
+    .about-grid img {
+      width: 100%;
+      height: 330px;
+      object-fit: cover;
+      border-radius: 30px;
+      box-shadow: 0 20px 50px rgba(31,49,35,0.22);
+      opacity: 0.92;
+    }
+
+    .about-text {
+      background: rgba(255,255,255,0.5);
+      padding: 35px;
+      border-radius: 30px;
+      box-shadow: 0 14px 45px rgba(31,49,35,0.1);
+    }
+
+    .about-text p {
+      line-height: 1.75;
+      color: #3f4b41;
+      font-size: 1.05rem;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 24px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .feature {
+      min-height: 240px;
+      border-radius: 28px;
+      padding: 30px;
+      background:
+        linear-gradient(rgba(255,255,255,0.76), rgba(255,255,255,0.76)),
+        url("img/frente1.jpg") center/cover;
+      box-shadow: 0 14px 35px rgba(31,49,35,0.13);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .feature:nth-child(2) {
+      background:
+        linear-gradient(rgba(255,255,255,0.76), rgba(255,255,255,0.76)),
+        url("img/frente2.jpg") center/cover;
+    }
+
+    .icon { font-size: 3rem; margin-bottom: 16px; }
+    .feature h3 { color: #17281c; font-size: 1.45rem; margin-bottom: 12px; }
+    .feature p { color: #445247; line-height: 1.55; }
+
+    .filter-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 38px;
+    }
+
+    .filter-btn {
+      border: 1px solid rgba(36,59,42,0.18);
+      background: rgba(255,255,255,0.68);
+      color: #243b2a;
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 8px 20px rgba(31,49,35,0.08);
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: #243b2a;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .menu-preview {
+      max-width: 1150px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .menu-item {
+      background: rgba(255,255,255,0.78);
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(31,49,35,0.1);
+      border: 1px solid rgba(255,255,255,0.7);
+      transition: 0.2s;
+    }
+
+    .menu-item:hover { transform: translateY(-5px); }
+
+    .menu-item img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .menu-content { padding: 22px; }
+
+    .menu-category {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: rgba(184,135,58,0.14);
+      color: #8b672b;
+      font-size: 0.78rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .menu-item h3 { color: #17281c; margin-bottom: 8px; }
+    .menu-item p { color: #4b584d; line-height: 1.5; margin-bottom: 14px; }
+
+    .price {
+      color: #8b672b;
+      font-weight: bold;
+      font-size: 1.18rem;
+    }
+
+    .hidden { display: none; }
+
+    footer {
+      margin-top: 60px;
+      padding: 35px 8%;
+      text-align: center;
+      background: rgba(23,40,28,0.92);
+      color: white;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 850px) {
+      nav {
+        justify-content: center;
+        gap: 10px;
+        padding: 12px 10px;
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        font-size: 0.85rem;
+        padding: 6px 4px;
+      }
+
+      .hero,
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 115px 5% 55px;
+        gap: 25px;
+      }
+
+      .hero-text,
+      .qr-card,
+      .about-text {
+        padding: 24px;
+        border-radius: 22px;
+      }
+
+      .hero p,
+      .section-title p,
+      .about-text p {
+        font-size: 1rem;
+      }
+
+      .btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin: 8px 0;
+      }
+
+      .qr-code-img {
+        width: 190px;
+        height: 190px;
+      }
+
+      section {
+        padding: 55px 5%;
+      }
+
+      .about-grid img {
+        height: 240px;
+      }
+
+      .filter-buttons {
+        gap: 8px;
+      }
+
+      .filter-btn {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+      }
+
+      .menu-preview {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 430px) {
+      h1 {
+        font-size: 2.45rem;
+      }
+
+      .qr-code-img {
+        width: 165px;
+        height: 165px;
+      }
+
+      .menu-item img {
+        height: 155px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="#inicio">Início</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#estrutura">Estrutura</a>
+    <a href="#cardapio">Cardápio</a>
+  </nav>
+
+  <main id="inicio" class="hero">
+    <div class="hero-text">
+      <span class="tag">Cardápio Digital • QR Code</span>
+      <h1>Lagoa Parque Hotel</h1>
+      <p>Acesse o cardápio digital do restaurante de forma rápida pelo celular. Uma solução simples, moderna e sustentável para hóspedes e visitantes.</p>
+      <a href="#cardapio" class="btn">Ver opções</a>
+      <a href="#sobre" class="btn secondary">Conhecer projeto</a>
+    </div>
+
+    <div class="qr-card">
+      <h2>Escaneie o QR Code</h2>
+      <img id="qrCode" class="qr-code-img" src="" alt="QR Code para acessar o cardápio digital">
+      <p>Escaneie com a câmera do celular para abrir este cardápio digital.</p>
+    </div>
+  </main>
+
+  <section id="sobre">
+    <div class="section-title">
+      <span>Sobre o projeto</span>
+      <h2>Praticidade em meio à natureza</h2>
+      <p>O projeto propõe substituir ou complementar cardápios impressos por uma página digital acessível via QR Code, facilitando atualizações e melhorando o atendimento.</p>
+    </div>
+
+    <div class="about-grid">
+      <img src="img/frente1.jpg" alt="Lagoa Parque Hotel visto da lagoa">
+      <div class="about-text">
+        <p>Localizado em um ambiente tranquilo e cercado pela natureza, o Lagoa Parque Hotel recebe hóspedes que buscam conforto, lazer e boa gastronomia. A solução digital permite que o restaurante apresente suas opções de forma organizada, reduzindo o uso de papel e agilizando o acesso às informações.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="estrutura">
+    <div class="section-title">
+      <span>Estrutura</span>
+      <h2>Experiência do hóspede</h2>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <div class="icon">🏨</div>
+        <h3>Acomodações</h3>
+        <p>Ambiente confortável para descanso, lazer e permanência dos hóspedes durante a estadia.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🍽️</div>
+        <h3>Restaurante</h3>
+        <p>Cardápio digital com refeições, bebidas, sobremesas e informações atualizadas.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">♨️</div>
+        <h3>Piscina térmica</h3>
+        <p>Espaço de lazer e relaxamento que complementa a experiência oferecida pelo hotel.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="cardapio">
+    <div class="section-title">
+      <span>Restaurante</span>
+      <h2>Cardápio Digital</h2>
+      <p>Escolha uma categoria para visualizar as opções disponíveis no restaurante.</p>
+    </div>
+
+    <div class="filter-buttons">
+      <button class="filter-btn active" data-filter="todos">Todos</button>
+      <button class="filter-btn" data-filter="entradas">Entradas</button>
+      <button class="filter-btn" data-filter="pratos">Pratos</button>
+      <button class="filter-btn" data-filter="sobremesas">Sobremesas</button>
+      <button class="filter-btn" data-filter="bebidas">Bebidas</button>
+    </div>
+
+    <div class="menu-preview">
+      <article class="menu-item" data-categoria="entradas">
+        <img src="https://images.unsplash.com/photo-1541014741259-de529411b96a?auto=format&fit=crop&w=900&q=80" alt="Bruschettas artesanais">
+        <div class="menu-content">
+          <span class="menu-category">Entrada</span>
+          <h3>Bruschettas da Casa</h3>
+          <p>Pães rústicos com tomate fresco, queijo colonial, manjericão e azeite aromatizado.</p>
+          <div class="price">R$ 34,90</div>
+        </div>
+      </article>
+
+      <article class="menu-item" data-categoria="entradas">
+        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80" alt="Salada especial">
+        <div class="menu-content">
+          <span class="menu-category">Entrada</span>
+          <h3>Salada do Lago</h3>
+          <p>Folhas verdes, tomate-cereja, nozes, queijo e molho especial de ervas.</p>
+          <div class="price">R$ 39,90</div>
+        </div>
+      </article>
+
+      <article class="menu-item" data-categoria="pratos">
+        <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=900&q=80" alt="Filé mignon ao molho">
+        <div class="menu-content">
+          <span class="menu-category">Prato</span>
+          <h3>Filé ao Molho de Vinho</h3>
+          <p>Filé grelhado, molho de vinho tinto, batatas rústicas e legumes salteados.</p>
+          <div class="price">R$ 89,90</div>
+        </div>
+      </article>
+
+      <article class="menu-item" data-categoria="pratos">
+        <img src="https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=900&q=80" alt="Risoto cremoso">
+        <div class="menu-content">
+          <span class="menu-category">Prato</span>
+          <h3>Risoto de Cogumelos</h3>
+          <p>Arroz arbóreo cremoso com cogumelos selecionados, parmesão e ervas finas.</p>
+          <div class="price">R$ 69,90</div>
+        </div>
+      </article>
+
+      <article class="menu-item" data-categoria="pratos">
+        <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=900&q=80" alt="Massa artesanal">
+        <div class="menu-content">
+          <span class="menu-category">Prato</span>
+          <h3>Fettuccine Artesanal</h3>
+          <p>Massa com molho especial da casa, queijo parmesão e toque de ervas frescas.</p>
+          <div class="price">R$ 54,90</div>
+        </div>
+      </article>
+
+      <article class="menu-item" data-categoria="sobremesas">
+        <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=900&q=80" alt="Cheesecake de frutas vermelhas">
+        <div class="menu-content">
+          <span class="menu-category">Sobremesa</span>
+          <h3>Cheesecake de Frutas Vermelhas</h3>
+          <p>Creme suave, massa crocante e calda artesanal de frutas vermelhas.</p>
+          <div class="price">R$ 29,90</div>
+        </div>
+      </article>
+
+      <article class="menu-item" data-categoria="sobremesas">
+        <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=900&q=80" alt="Brownie com sorvete">
+        <div class="menu-content">
+          <span class="menu-category">Sobremesa</span>
+          <h3>Brownie com Sorvete</h3>
+          <p>Brownie de chocolate servido com sorvete de creme e calda quente.</p>
+          <div class="price">R$ 27,90</div>
+        </div>
+      </article>
+
+      <article class="menu-item" data-categoria="bebidas">
+        <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=900&q=80" alt="Suco natural">
+        <div class="menu-content">
+          <span class="menu-category">Bebida</span>
+          <h3>Suco Natural</h3>
+          <p>Sabores variados conforme disponibilidade: laranja, uva, morango e abacaxi com hortelã.</p>
+          <div class="price">R$ 15,90</div>
+        </div>
+      </article>
+
+      <article class="menu-item" data-categoria="bebidas">
+        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=900&q=80" alt="Café especial">
+        <div class="menu-content">
+          <span class="menu-category">Bebida</span>
+          <h3>Café Especial</h3>
+          <p>Café passado na hora, ideal para acompanhar doces e momentos de descanso.</p>
+          <div class="price">R$ 9,90</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <script>
+    function gerarQRCode() {
+      const qrCode = document.getElementById('qrCode');
+      const urlAtual = window.location.href;
+      const urlQRCode = 'https://api.qrserver.com/v1/create-qr-code/?size=230x230&data=' + encodeURIComponent(urlAtual);
+      qrCode.src = urlQRCode;
+    }
+
+    function filtrarCardapio(categoria) {
+      const itens = document.querySelectorAll('.menu-item');
+      const botoes = document.querySelectorAll('.filter-btn');
+
+      botoes.forEach(botao => {
+        botao.classList.toggle('active', botao.dataset.filter === categoria);
+      });
+
+      itens.forEach(item => {
+        const categoriaItem = item.dataset.categoria;
+        const deveAparecer = categoria === 'todos' || categoria === categoriaItem;
+        item.style.display = deveAparecer ? 'block' : 'none';
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      gerarQRCode();
+
+      document.querySelectorAll('.filter-btn').forEach(botao => {
+        botao.addEventListener('click', () => {
+          filtrarCardapio(botao.dataset.filter);
+        });
+      });
+
+      filtrarCardapio('todos');
+    });
+  </script>
+
+  <footer>
+    <strong>Lagoa Parque Hotel</strong><br>
+    Cardápio Digital Demonstrativo • Projeto Acadêmico de Extensão<br>
+    Desenvolvido para melhorar o acesso às informações do restaurante por meio de QR Code.
+  </footer>
+</body>
+</html>
